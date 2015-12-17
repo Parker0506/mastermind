@@ -18,10 +18,15 @@ def make_a_guess(guess_size):
     guess.append(random.randint(0,guess_size-1))
   return guess
 
+def guess_to_str(guess):
+  result=""
+  for i in guess:
+    result += Colors.color_list[i][1] + " "
+  return result
+
 def main():
-  print Colors.color_list
   g = make_a_guess(6)
-  print g
+  print guess_to_str(g)
 
 if __name__ == '__main__':
   main()
