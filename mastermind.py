@@ -1,6 +1,11 @@
 #!/usr/bin/python
 
+from __future__ import print_function
+
 import random
+import sys
+import readline
+
 
 class Colors:
   color_list = [
@@ -23,7 +28,7 @@ class Colors:
   def initialize_reverse_lookup():
     for n,i in enumerate(Colors.color_list):
       if i[1] in Colors.reverse_dict:
-        print "color symbol %s-%s alrady present with value %s"%(i[1],i[0],Colors.reverse_dict[i[1]])
+        print("color symbol %s-%s alrady present with value %s"%(i[1],i[0],Colors.reverse_dict[i[1]]))
         sys.exit(1)
       Colors.reverse_dict[i[1]] = (i[0],n)
     Colors.reverse_lookup_initialized = 1
@@ -36,10 +41,10 @@ class Colors:
       return -1
     return Colors.reverse_dict[color][1]
 
-def make_a_guess(guess_size):
+def make_a_guess(guess_size, color_size):
   guess=[]
   for i in range(guess_size):
-    guess.append(random.randint(0,guess_size-1))
+    guess.append(random.randint(0,color_size-1))
   return guess
 
 def guess_to_str(guess):
@@ -48,36 +53,41 @@ def guess_to_str(guess):
     result += Colors.color_list[i][1] + " "
   return result
 
-def validated_guess(raw_str):
+def validate_guess(raw_str, expected_size):
   raw_str = raw_str.strip()
   colors = raw_str.split()
   guess = []
+  count = 0
   for i in colors:
     result = Colors.validate(i)
     if result == -1:
-      print "color %s is not valid"%i
+      print("color %s is not valid"%i)
       return (0,[])
     guess.append(result)
+    count += 1
+  if not count == expected_size:
+    print("input was only of len %d, but expected %d"%(count,expected_size))
+    return (0,[])
   return (1,guess)
 
-def get_a_input_guess():
+def get_a_input_guess(expected_size):
   got = 0
   attempts = 1
   while not got:
-    guess = raw_input("Enter a guess, separated by white spaces:")
-    ok,result = validated_guess(guess)
+    guess = raw_input("Enter a guess of size %d, separated by white spaces:"%expected_size)
+    ok,result = validate_guess(guess, expected_size)
     if ok:
       got = 1
     attempts += 1
     if attempts > 3:
-      print ("Too many attempts")
+      print("Too many attempts")
       sys.exit(1)
   return result
 
 def compare_guesses(lhs, rhs):
   l = len(lhs)
   if l != len(rhs):
-    print "Lengths are not same - %d, %d"%(l,len(rhs))
+    print("Lengths are not same - %d, %d"%(l,len(rhs)))
     return -1
   # lets find the same ones by comparison
   # and count colors in either side for remaining.
@@ -95,12 +105,30 @@ def compare_guesses(lhs, rhs):
     color_okies += min(i,j)
   return (rights,color_okies)
 
+def play_a_game(current_guess_size, current_color_size):
+  if current_color_size > Colors.max_color():
+    print("sorry.. we support only %d number of colors. input was %d"%(Colors.max_color(),current_color_size))
+    sys.exit(1)
+  if current_guess_size >= current_color_size:
+    print("guess size(%d) should be lesser than color size(%d)"%(current_guess_size, current_color_size))
+    sys.exit(1)
+  print("Allowed colors are: %s"%(guess_to_str(range(0,current_color_size))))
+  mine = make_a_guess(current_guess_size, current_color_size)
+  print("Guess is %s"%guess_to_str(mine), file=sys.stderr)
+  attempts = 0
+  while True:
+    g = get_a_input_guess(current_guess_size)
+    attempts += 1
+    (rights, color_okies) = compare_guesses(mine, g)
+    if rights == current_guess_size:
+      print("You got it!")
+      break
+    else:
+      print("Rights: %d, color matches: %d. Attempts so far: %d\n"%(rights,color_okies,attempts))
+  
 
 def main():
-  g = make_a_guess(6)
-  print guess_to_str(g)
-  g = get_a_input_guess()
-  print "You gave: "+guess_to_str(g)
+  play_a_game(4,6)
 
 if __name__ == '__main__':
   main()
