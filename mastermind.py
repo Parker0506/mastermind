@@ -12,6 +12,10 @@ class Colors:
     ("brown",  'B'),  # 5
     ("Last-Non-color-Count", "?") ]
 
+  @staticmethod
+  def max_color():
+    return len(Colors.color_list)
+
   reverse_lookup_initialized = 0
   reverse_dict = dict()
 
@@ -69,6 +73,28 @@ def get_a_input_guess():
       print ("Too many attempts")
       sys.exit(1)
   return result
+
+def compare_guesses(lhs, rhs):
+  l = len(lhs)
+  if l != len(rhs):
+    print "Lengths are not same - %d, %d"%(l,len(rhs))
+    return -1
+  # lets find the same ones by comparison
+  # and count colors in either side for remaining.
+  left_colors=[0]*Colors.max_color()
+  right_colors=[0]*Colors.max_color()
+  rights = 0
+  color_okies = 0
+  for (i,j) in zip(lhs,rhs):
+    if i == j:
+      rights += 1
+    else:
+      left_colors[i] += 1
+      right_colors[j] += 1
+  for (i,j) in zip(left_colors,right_colors):
+    color_okies += min(i,j)
+  return (rights,color_okies)
+
 
 def main():
   g = make_a_guess(6)
