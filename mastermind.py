@@ -15,11 +15,15 @@ class Colors:
     ("green",  'G'),  # 3
     ("white",  'W'),  # 4
     ("brown",  'B'),  # 5
+    ("magenta",'M'),  # 6
+    ("cyan",   'C'),  # 7
+    ("violet", 'V'),  # 8
+    ("indigo", 'I'),  # 9
     ("Last-Non-color-Count", "?") ]
 
   @staticmethod
   def max_color():
-    return len(Colors.color_list)
+    return len(Colors.color_list) - 1
 
   reverse_lookup_initialized = 0
   reverse_dict = dict()
@@ -112,6 +116,9 @@ def play_a_game(current_guess_size, current_color_size):
   if current_guess_size >= current_color_size:
     print("guess size(%d) should be lesser than color size(%d)"%(current_guess_size, current_color_size))
     sys.exit(1)
+  if current_guess_size < 4:
+    print("guess size(%d) should be minimum of 4"%(current_guess_size))
+    sys.exit(1)
   print("Allowed colors are: %s"%(guess_to_str(range(0,current_color_size))))
   mine = make_a_guess(current_guess_size, current_color_size)
   print("Guess is %s"%guess_to_str(mine), file=sys.stderr)
@@ -125,11 +132,23 @@ def play_a_game(current_guess_size, current_color_size):
       break
     else:
       print("Rights: %d, color matches: %d. Attempts so far: %d\n"%(rights,color_okies,attempts))
+
+def get_color_size(color_size):
+  c = int(color_size)
+  if c < 6 or c > Colors.max_color():
+    print("Choose color size between 6 and %d"%Colors.max_color())
+    sys.exit(1)
+  return c
   
-
-def main():
-  play_a_game(4,6)
-
 if __name__ == '__main__':
-  main()
+  if len(sys.argv) == 1:
+    color_size = 6
+    guess_size = 4
+  elif len(sys.argv) == 2:
+    color_size = get_color_size(sys.argv[1])
+    guess_size = color_size - 2
+  else:
+    color_size = get_color_size(sys.argv[1])
+    guess_size = int(sys.argv[2])
+  play_a_game(guess_size, color_size)
 
