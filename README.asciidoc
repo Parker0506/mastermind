@@ -1,0 +1,50 @@
+MasterMind
+==========
+
+https://en.wikipedia.org/wiki/Mastermind_(board_game)[Mastermind] is
+a simple board game, where one player makes a guess and the other
+player tries to find what the guess was in as little attempts as
+possible.
+
+In this implementation, the computer always makes the guess, and the
+human player tries to find out.
+
+Each guess is a sequence of colors. Colors may repeat. The standard
+implementation has 6 colors and the sequence itself is of size 4.
+For every attempt, the computer reports how many were exact matches
+and in the remaining, how many colors matched.
+
+In order to debug the program itself, and for verification, the
+computer prints the original guess to stderr. To try running, do 
+
+----
+$ ./mastermind.py 2> /tmp/some_file
+Allowed colors are: R P Y G W B
+Enter a guess of size 4, separated by white spaces:R P Y G
+Rights: 0, color matches: 3. Attempts so far: 1
+
+Enter a guess of size 4, separated by white spaces:W R P Y
+Rights: 0, color matches: 2. Attempts so far: 2
+
+Enter a guess of size 4, separated by white spaces:B G R P
+Rights: 1, color matches: 2. Attempts so far: 3
+
+Enter a guess of size 4, separated by white spaces:B G R R
+Rights: 0, color matches: 2. Attempts so far: 4
+
+Enter a guess of size 4, separated by white spaces:G B B P
+Rights: 2, color matches: 1. Attempts so far: 5
+
+Enter a guess of size 4, separated by white spaces:G B P P
+Rights: 2, color matches: 1. Attempts so far: 6
+
+Enter a guess of size 4, separated by white spaces:G B G P
+Rights: 3, color matches: 0. Attempts so far: 7
+
+Enter a guess of size 4, separated by white spaces:Y B G P
+You got it!
+$ cat /tmp/some_file
+Guess is Y B G P
+$
+----
+
