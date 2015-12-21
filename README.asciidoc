@@ -15,10 +15,10 @@ For every attempt, the computer reports how many were exact matches
 and in the remaining, how many colors matched.
 
 In order to debug the program itself, and for verification, the
-computer prints the original guess to stderr. To try running, do 
+computer prints the original guess to /tmp/current_guess.
 
 ----
-$ ./mastermind.py 2> /tmp/some_file
+$ ./mastermind.py
 Allowed colors are: R P Y G W B
 Enter a guess of size 4, separated by white spaces:R P Y G
 Rights: 0, color matches: 3. Attempts so far: 1
@@ -43,7 +43,7 @@ Rights: 3, color matches: 0. Attempts so far: 7
 
 Enter a guess of size 4, separated by white spaces:Y B G P
 You got it!
-$ cat /tmp/some_file
+$ cat /tmp/current_guess
 Guess is Y B G P
 $
 ----

@@ -121,7 +121,13 @@ def play_a_game(current_guess_size, current_color_size):
     sys.exit(1)
   print("Allowed colors are: %s"%(guess_to_str(range(0,current_color_size))))
   mine = make_a_guess(current_guess_size, current_color_size)
-  print("Guess is %s"%guess_to_str(mine), file=sys.stderr)
+  guess_file="/tmp/current_guess"
+  try:
+    f=open(guess_file,"w")
+    print("Guess is %s"%guess_to_str(mine), file=f)
+    f.close()
+  except Exception,e:
+    print("Some trouble in printing guess into %s:%s"%(guess_file,str(e)))
   attempts = 0
   while True:
     g = get_a_input_guess(current_guess_size)
@@ -139,7 +145,7 @@ def get_color_size(color_size):
     print("Choose color size between 6 and %d"%Colors.max_color())
     sys.exit(1)
   return c
-  
+
 if __name__ == '__main__':
   if len(sys.argv) == 1:
     color_size = 6
