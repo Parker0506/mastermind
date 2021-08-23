@@ -78,7 +78,7 @@ def get_a_input_guess(expected_size):
   got = 0
   attempts = 1
   while not got:
-    guess = raw_input("Enter a guess of size %d, separated by white spaces:"%expected_size)
+    guess = input("Enter a guess of size %d, separated by white spaces:"%expected_size)
     ok,result = validate_guess(guess, expected_size)
     if ok:
       got = 1
@@ -126,7 +126,7 @@ def play_a_game(current_guess_size, current_color_size):
     f=open(guess_file,"w")
     print("Guess is %s"%guess_to_str(mine), file=f)
     f.close()
-  except Exception,e:
+  except Exception as e:
     print("Some trouble in printing guess into %s:%s"%(guess_file,str(e)))
   attempts = 0
   while True:
@@ -157,4 +157,3 @@ if __name__ == '__main__':
     color_size = get_color_size(sys.argv[1])
     guess_size = int(sys.argv[2])
   play_a_game(guess_size, color_size)
-
